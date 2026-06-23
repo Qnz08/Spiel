@@ -1,0 +1,247 @@
+/* ─── Reset & Tokens ──────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:       #0a0a0f;
+  --accent:   #7c3aff;
+  --accent2:  #00e5ff;
+  --tip-color: #ff4081;
+  --text:     #f0eeff;
+  --muted:    rgba(240, 238, 255, 0.45);
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ─── Scene ───────────────────────────────────────────────────────────────── */
+#scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#video {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+#canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── HUD ─────────────────────────────────────────────────────────────────── */
+#hud {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 24px 36px;
+}
+
+#hud-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hp-block, .score-block, .enemy-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.score-block { align-items: center; }
+.enemy-block { align-items: flex-end; }
+
+.hp-label, .score-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.hp-bar {
+  width: 140px;
+  height: 14px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  transition: width 0.2s ease;
+}
+
+.hp-fill.player {
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+}
+
+#score-value {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#enemy-count {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--tip-color);
+}
+
+/* ─── Gesture Badge ───────────────────────────────────────────────────────── */
+#gesture-badge {
+  align-self: center;
+  padding: 10px 22px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  backdrop-filter: blur(6px);
+}
+
+#gesture-badge[data-gesture="fist"]  { border-color: var(--tip-color); color: var(--tip-color); }
+#gesture-badge[data-gesture="open"]  { border-color: var(--accent2);  color: var(--accent2); }
+#gesture-badge[data-gesture="peace"] { border-color: var(--accent);    color: var(--accent); }
+
+/* ─── Permission / Loading Screens (unverändert) ─────────────────────────── */
+#permission-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+  z-index: 100;
+  text-align: center;
+}
+
+#permission-screen h1 {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#permission-screen p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 340px;
+}
+
+#start-btn, #restart-btn {
+  margin-top: 8px;
+  padding: 14px 36px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  pointer-events: all;
+  box-shadow: 0 4px 24px rgba(124, 58, 255, 0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+#start-btn:active, #restart-btn:active {
+  transform: scale(0.96);
+}
+
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 99;
+}
+
+#loading-screen.hidden { display: none; }
+
+#loading-screen p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(124, 58, 255, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Game Over Panel ─────────────────────────────────────────────────────── */
+#gameover-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 50;
+}
+
+#gameover-panel.hidden { display: none; }
+
+#gameover-panel h2 {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--tip-color);
+  text-shadow: 0 0 30px rgba(255, 64, 129, 0.6);
+}
+
+#gameover-panel p {
+  font-size: 18px;
+  color: var(--text);
+}
+
+.hidden { display: none; }

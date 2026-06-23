@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Hand Arena Fighter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Kamera-Berechtigung ────────────────────────────────────────────── -->
+  <div id="permission-screen">
+    <h1>Hand Arena Fighter</h1>
+    <p>Steuere deinen Kämpfer mit der Hand. Faust = Angriff, offene Hand = Block, Peace-Zeichen = Dash.</p>
+    <button id="start-btn">Kamera starten &amp; Kämpfen</button>
+  </div>
+
+  <!-- ── Ladescreen ─────────────────────────────────────────────────────── -->
+  <div id="loading-screen" class="hidden">
+    <div class="spinner"></div>
+    <p>Arena wird vorbereitet…</p>
+  </div>
+
+  <!-- ── Hauptszene ─────────────────────────────────────────────────────── -->
+  <div id="scene">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
+
+    <div id="hud">
+      <div id="hud-top">
+        <div class="hp-block">
+          <span class="hp-label">Du</span>
+          <div class="hp-bar"><div id="player-hp-fill" class="hp-fill player"></div></div>
+        </div>
+        <div class="score-block">
+          <span class="score-label">Score</span>
+          <span id="score-value">0</span>
+        </div>
+        <div class="enemy-block">
+          <span class="hp-label">Gegner</span>
+          <span id="enemy-count">1</span>
+        </div>
+      </div>
+
+      <div id="gesture-badge">–</div>
+    </div>
+
+    <!-- ── Game Over ──────────────────────────────────────────────────── -->
+    <div id="gameover-panel" class="hidden">
+      <h2>Game Over</h2>
+      <p>Score: <span id="final-score">0</span></p>
+      <button id="restart-btn">Erneut kämpfen</button>
+    </div>
+  </div>
+
+  <!-- ── MediaPipe (vanilla JS, kein Framework) ─────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+  <!-- ── Game-Code: zuerst Engine, dann Input (Input startet die Engine) ── -->
+  <script src="game.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
